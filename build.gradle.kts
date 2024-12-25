@@ -83,7 +83,7 @@ publishing {
             // Define Maven artifact metadata
             groupId = "com.github.clodymade"    // GitHub username as group ID
             artifactId = "feat_ble"             // Module name as artifact ID
-            version = "1.0.0"                   // Version matching the Git tag
+            version = "1.0.1"                   // Version matching the Git tag
 
             // Configure POM metadata
             pom {

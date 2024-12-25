@@ -7,6 +7,8 @@
 -keep class com.mwkg.ble.util.HiBleParser { *; }
 -keep class com.mwkg.ble.util.HiBeaconParser { *; }
 -keep class com.mwkg.ble.util.HiBleScanner { *; }
+-keep class com.mwkg.ble.view.HiBleDeviceListActivity { *; }
+-keep class com.mwkg.ble.viewmodel.HiBleDeviceListViewModel { *; }
 
 # Keep all annotations in the library
 -keepattributes *Annotation*

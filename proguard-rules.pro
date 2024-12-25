@@ -7,13 +7,7 @@
 -keepattributes *Annotation*
 
 # Preserve method signatures for reflection
--keepattributes Signature, EnclosingMethod, InnerClasses
-
-# Keep all enums and their values
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
+-keepattributes Signature, MethodParameters, EnclosingMethod, InnerClasses
 
 # Preserve Serializable classes
 -keepclassmembers class * implements java.io.Serializable {
@@ -26,11 +20,14 @@
 
 # --- Rules for java.lang.invoke package and StringConcatFactory ---
 
+# Suppress warnings for missing StringConcatFactory
+-dontwarn java.lang.invoke.StringConcatFactory
+
 # Keep all classes from java.lang.invoke package
 -keep class java.lang.invoke.** { *; }
 
-# Keep StringConcatFactory explicitly
--keep class java.lang.invoke.StringConcatFactory { *; }
+# Explicitly keep StringConcatFactory
+#-keep class java.lang.invoke.StringConcatFactory { *; }
 
 # --- Specific ProGuard rules for feat_ble classes ---
 
@@ -49,6 +46,12 @@
 # Keep HiBleScanner class and its public methods
 -keep class com.mwkg.ble.util.HiBleScanner { *; }
 
+# Keep HiBleDeviceListActivity class and its public methods
+-keep class com.mwkg.ble.view.HiBleDeviceListActivity { *; }
+
+# Keep HiBleDeviceListViewModel class and its public members
+-keep class com.mwkg.ble.viewmodel.HiBleDeviceListViewModel { *; }
+
 # --- Additional generic rules for safety ---
 
 # Keep Parcelable implementations
@@ -56,7 +59,7 @@
     public static final android.os.Parcelable$Creator CREATOR;
 }
 
-# Keep data binding generated classes
+# Keep Data Binding generated classes
 -keep class androidx.databinding.** { *; }
 -keepclassmembers class androidx.databinding.** { *; }
 
@@ -67,15 +70,8 @@
 # Keep coroutines-related classes
 -keep class kotlinx.coroutines.** { *; }
 
-# Keep Retrofit models (if applicable)
--keep class retrofit2.** { *; }
-
-# Keep Room Database and DAOs (if applicable)
--keep class androidx.room.** { *; }
--keepclassmembers class androidx.room.** { *; }
-
 # Keep Gson models (if applicable)
--keep class com.google.gson.** { *; }
--keepclassmembers class * {
-    @com.google.gson.annotations.SerializedName <fields>;
-}
+#-keep class com.google.gson.** { *; }
+#-keepclassmembers class * {
+#    @com.google.gson.annotations.SerializedName <fields>;
+#}
