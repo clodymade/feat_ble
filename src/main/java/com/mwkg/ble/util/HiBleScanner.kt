@@ -24,17 +24,12 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
-import android.os.ParcelUuid
 import android.util.Log
 import com.mwkg.ble.model.HiBleResult
-import com.mwkg.util.HiPermissionManager
-import com.mwkg.util.HiPermissionType
-import com.mwkg.util.PermissionReqCodes
-import com.mwkg.util.hiHasPermissions
+import com.mwkg.ble.util.HiToolkit.hasPermissions
 
 /**
  * A utility object for managing Bluetooth Low Energy (BLE) scanning operations.
- * Implements the [HiScanner] interface for modular scanning functionality.
  */
 @SuppressLint("StaticFieldLeak") // Suppresses warnings about potential memory leaks.
 object HiBleScanner {
@@ -76,8 +71,8 @@ object HiBleScanner {
         initialize()
 
         // Check and request necessary permissions.
-        val permissions = HiPermissionManager.getMergedPermissions(HiPermissionType.BLE, HiPermissionType.BEACON)
-        if (!activity.hiHasPermissions(permissions)) {
+        val permissions = HiPermission.getMergedPermissions(HiPermissionType.BLE, HiPermissionType.BEACON)
+        if (!activity.hasPermissions(permissions)) {
             activity.requestPermissions(permissions, PermissionReqCodes.BLE_BEACON)
             return
         }
@@ -124,8 +119,8 @@ object HiBleScanner {
      */
     fun hasRequiredPermissions(): Boolean {
         return activity?.let {
-            val permissions = HiPermissionManager.getMergedPermissions(HiPermissionType.BLE, HiPermissionType.BEACON)
-            it.hiHasPermissions(permissions)
+            val permissions = HiPermission.getMergedPermissions(HiPermissionType.BLE, HiPermissionType.BEACON)
+            it.hasPermissions(permissions)
         } ?: false
     }
 

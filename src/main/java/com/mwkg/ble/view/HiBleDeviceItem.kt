@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mwkg.ble.model.HiBleDevice
-import com.mwkg.util.hiToPrettyJsonString
+import com.mwkg.ble.util.HiToolkit.toPrettyJsonString
 
 /**
  * Composable function to display information about a BLE device.
@@ -49,7 +49,7 @@ fun HiBleDeviceItem(device: HiBleDevice) {
             // Displays the advertisement data as a JSON string.
             HiBleDeviceDetailText(
                 label = "Advertisement Data",
-                value = device.advertisementData.hiToPrettyJsonString()
+                value = device.advertisementData.toPrettyJsonString()
             )
             // Displays the beaconUUID.
             HiBleDeviceDetailText(
