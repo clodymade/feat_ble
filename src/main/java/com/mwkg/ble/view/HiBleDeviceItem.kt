@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mwkg.ble.model.HiBleDevice
-import com.mwkg.ble.util.HiToolkit.toPrettyJsonString
+import com.mwkg.ble.util.HiBleToolkit.toPrettyJsonString
 
 /**
  * Composable function to display information about a BLE device.
