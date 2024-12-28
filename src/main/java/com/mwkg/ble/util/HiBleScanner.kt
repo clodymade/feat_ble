@@ -71,9 +71,9 @@ object HiBleScanner {
         initialize()
 
         // Check and request necessary permissions.
-        val permissions = HiBlePermission.getMergedPermissions(HiPermissionType.BLE, HiPermissionType.BEACON)
+        val permissions = HiBlePermission.getMergedPermissions(HiBlePermissionType.BLE, HiBlePermissionType.BEACON)
         if (!activity.hasPermissions(permissions)) {
-            activity.requestPermissions(permissions, PermissionReqCodes.BLE_BEACON)
+            activity.requestPermissions(permissions, HiBlePermissionReqCodes.BLE_BEACON)
             return
         }
 
@@ -119,7 +119,7 @@ object HiBleScanner {
      */
     fun hasRequiredPermissions(): Boolean {
         return activity?.let {
-            val permissions = HiBlePermission.getMergedPermissions(HiPermissionType.BLE, HiPermissionType.BEACON)
+            val permissions = HiBlePermission.getMergedPermissions(HiBlePermissionType.BLE, HiBlePermissionType.BEACON)
             it.hasPermissions(permissions)
         } ?: false
     }
