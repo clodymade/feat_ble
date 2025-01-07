@@ -92,19 +92,12 @@ import com.mwkg.ble.util.HiBleScanner
 
 ```kotlin
 HiBleScanner.start(this) { result ->
-    when (result) {
-        is HiResult.HiBleResult -> {
-            println("Device Found:")
-            println("Name: ${result.scanRecord?.deviceName ?: "Unknown"}")
-            println("RSSI: ${result.rssi}")
-            println("UUID: ${result.scanRecord?.serviceUuids?.firstOrNull()?.toString() ?: ""}")
-            println("Major: ${result.major}, Minor: ${result.minor}")
-            println("Beacon UUID: ${result.beaconUUID}")")
-        }
-        else -> {
-            println("Error: ${result.error}")
-        }
-    }
+    println("Device Found:")
+    println("Name: ${result.scanRecord?.deviceName ?: "Unknown"}")
+    println("RSSI: ${result.rssi}")
+    println("UUID: ${result.scanRecord?.serviceUuids?.firstOrNull()?.toString() ?: ""}")
+    println("Major: ${result.major}, Minor: ${result.minor}")
+    println("Beacon UUID: ${result.beaconUUID}")")
 }
 ```
 

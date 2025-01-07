@@ -25,6 +25,10 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.mwkg.ble.model.HiBleResult
 import com.mwkg.ble.util.HiBleToolkit.hasPermissions
 
@@ -58,9 +62,8 @@ object HiBleScanner {
      * Starts BLE scanning with the required permissions.
      *
      * @param activity The current [Activity], used for requesting permissions and accessing system services.
-     * @param callback A lambda function to handle scan results, provided as [HiResult].
+     * @param callback A lambda function to handle scan results, provided as [HiBleResult].
      */
-    @SuppressLint("MissingPermission")
     fun start(
         activity: Activity,
         callback: (HiBleResult) -> Unit
@@ -71,12 +74,41 @@ object HiBleScanner {
         initialize()
 
         // Check and request necessary permissions.
-        val permissions = HiBlePermission.getMergedPermissions(HiBlePermissionType.BLE, HiBlePermissionType.BEACON)
-        if (!activity.hasPermissions(permissions)) {
-            activity.requestPermissions(permissions, HiBlePermissionReqCodes.BLE_BEACON)
+        val reqPermissions = HiBlePermission.getMergedPermissions(
+            HiBlePermissionType.BLE,
+            HiBlePermissionType.BEACON
+        )
+
+        // Check if the permissions are granted
+        if (!activity.hasPermissions(reqPermissions)) {
+            if (activity is AppCompatActivity) {
+                ActivityCompat.requestPermissions(activity, reqPermissions, HiBlePermissionReqCodes.BLE_BEACON)
+            } else if (activity is ComponentActivity) {
+                val launcher = activity.registerForActivityResult(
+                    ActivityResultContracts.RequestMultiplePermissions()
+                ) { permissions ->
+                    val allGranted = permissions.all { it.value }
+                    if (allGranted) {
+                        startScanner()
+                    } else {
+                        Log.e("ModularX::HiBleScanner", "Permissions not granted.")
+                    }
+                }
+                launcher.launch(reqPermissions)
+            } else {
+                throw IllegalArgumentException("Unsupported activity type")
+            }
             return
         }
 
+        startScanner()
+    }
+
+    /**
+     * Handles the core logic to start the scanner once permissions are granted.
+     */
+    @SuppressLint("MissingPermission")
+    private fun startScanner() {
         // Prevent multiple scan operations.
         if (isScanning) {
             Log.d("ModularX::HiBleScanner", "Scanning is already in progress.")

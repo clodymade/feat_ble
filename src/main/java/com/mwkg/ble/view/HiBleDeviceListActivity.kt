@@ -39,27 +39,6 @@ class HiBleDeviceListActivity : ComponentActivity() {
     // ViewModel to manage the BLE device list state
     private val viewModel: HiBleDeviceListViewModel by viewModels()
 
-    private val requestPermissionsLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            permissions.entries.forEach { (permission, isGranted) ->
-                Log.d("PermissionResult", "$permission: $isGranted")
-            }
-
-            val isLocationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
-            val isBluetoothGranted =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    permissions[Manifest.permission.BLUETOOTH_SCAN] ?: false
-                } else {
-                    true
-                }
-
-            if (isLocationGranted && isBluetoothGranted) {
-                startBleScanner()
-            } else {
-                HiBleScanner.stop()
-            }
-        }
-
     /**
      * Called when the activity is starting. Sets up the content and initializes BLE scanning.
      */
@@ -74,13 +53,7 @@ class HiBleDeviceListActivity : ComponentActivity() {
             )
         }
 
-        val reqPermissions = HiBlePermission.getMergedPermissions(HiBlePermissionType.BLE, HiBlePermissionType.BEACON)
-        if (!hasPermissions(reqPermissions)) {
-            requestPermissionsLauncher.launch(reqPermissions)
-        }
-        else {
-            startBleScanner()
-        }
+        startBleScanner()
     }
 
     private fun startBleScanner() {
